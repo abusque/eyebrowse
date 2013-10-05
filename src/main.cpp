@@ -20,6 +20,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "constants.h"
 #include "findEyeCenter.h"
 #include "findEyeCorner.h"
+#include "uiActions.h"
 
 /** Function Headers */
 void detectAndDisplay( cv::Mat frame );
