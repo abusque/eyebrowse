@@ -16,6 +16,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include <queue>
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
 
 #include "constants.h"
 #include "findEyeCenter.h"
@@ -31,6 +32,9 @@ cv::CascadeClassifier face_cascade;
 cv::RNG rng(12345);
 cv::Mat debugImage;
 cv::Mat skinCrCbHist = cv::Mat::zeros(cv::Size(256, 256), CV_8UC1);
+
+time_t timerStart;
+bool faceDetected = false;
 
 /**
  * @function main
@@ -49,8 +53,10 @@ int main( int argc, const char** argv ) {
   ellipse(skinCrCbHist, cv::Point(113, 155.6), cv::Size(23.4, 15.2),
           43.0, 0.0, 360.0, cv::Scalar(255, 255, 255), -1);
 
-   // Read the video stream
+  // Read the video stream
   capture = cvCaptureFromCAM( -1 );
+  // Start no face timer for the first time
+  timerStart = time(NULL);
   if( capture ) {
     while( true ) {
       frame = cvQueryFrame( capture );
@@ -156,7 +162,7 @@ void findEyes(cv::Mat frame_gray, cv::Rect face) {
 
   //Debug output
   //std::cout << "Right pupil: (" << rightPupil.x << ", " << rightPupil.y << ")" << std::endl;
-  std::cout << "Left pupil: (" << leftPupil.x << ", " << leftPupil.y << ")" << std::endl;
+  //std::cout << "Left pupil: (" << leftPupil.x << ", " << leftPupil.y << ")" << std::endl;
 }
 
 
@@ -204,7 +210,23 @@ void detectAndDisplay( cv::Mat frame ) {
     rectangle(debugImage, faces[i], 1234);
   }
   //-- Show what you got
-  if (faces.size() > 0) {
-    findEyes(frame_gray, faces[0]);
+  if (faces.size() > 0)
+  {
+      if(!faceDetected)
+	  faceDetected = true;
+      findEyes(frame_gray, faces[0]);
+  }
+  else
+  {
+      if(faceDetected)
+      {
+	  faceDetected = false;
+	  timerStart = time(NULL);
+      }
+      else
+      {
+	  double noFaceDuration = difftime(time(NULL), timerStart);
+	  std::cout << "No face duration: " << noFaceDuration << std::endl;
+      }
   }
 }
