@@ -227,6 +227,8 @@ void detectAndDisplay( cv::Mat frame ) {
       {
 	  double noFaceDuration = difftime(time(NULL), timerStart);
 	  std::cout << "No face duration: " << noFaceDuration << std::endl;
+        if(noFaceDuration > 5)
+          lockScreen();
       }
   }
 }
