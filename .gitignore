@@ -14,3 +14,7 @@
 
 # Compilation directory
 build/
+
+# emacs files
+*~
+\#*\#
