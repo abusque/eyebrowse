@@ -4,7 +4,7 @@ xdo_t* xdo = xdo_new(NULL);
 
 int lockScreen()
 {
-	return system("cinnamon-screensaver-command -l");
+	return system(CINNAMON);
 }
 
 void scrollUp()
