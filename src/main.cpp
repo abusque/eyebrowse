@@ -89,6 +89,9 @@ int main( int argc, const char** argv ) {
     scrollDown.lookupValue("ticks", scrollDownTicks); 
   }
 
+  // Read screen resolution which will be used to compute mouse position
+  initScreenResolution();
+
   while(true)
   {
     if(!tracker.update())

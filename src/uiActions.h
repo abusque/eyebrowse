@@ -5,11 +5,14 @@
 
 #include <stdlib.h>
 extern "C"{
-  #include <xdo.h>
+#include <xdo.h>
 }
 
-	int lockScreen();
-	void scrollDown(int scrollTicks = 8);
-	void scrollUp();
+int lockScreen();
+void scrollDown(int scrollTicks = 8);
+void scrollUp();
+void moveMouseLeftWindow();
+void moveMouseRightWindow();
+void initScreenResolution();
 
 #endif //UI_ACTIONS_H
