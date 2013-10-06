@@ -11,6 +11,9 @@
 #define DEFAULT_SCROLLDOWN_DELAY      2
 #define DEFAULT_SCROLLDOWN_TICKS      8
 
+#define DEFAULT_HORIZ_FOCUS_ACTIVATED true
+#define DEFAULT_HORIZ_FOCUS_DELAY     3
+
 using namespace std;
 using namespace libconfig;
 
@@ -73,6 +76,16 @@ Configurator::Configurator(QWidget *parent) :
     int ticks = DEFAULT_SCROLLDOWN_TICKS;
     scrollDown.lookupValue("ticks", ticks);
     ui->updScrollTicks->setValue(ticks);
+
+    Setting &horizFocus = root["horizFocus"];
+
+    bool focusActivated = DEFAULT_HORIZ_FOCUS_ACTIVATED;
+    horizFocus.lookupValue("activated", focusActivated);
+    ui->ckbFocus->setChecked(focusActivated);
+
+    delay = DEFAULT_HORIZ_FOCUS_DELAY;
+    horizFocus.lookupValue("delay", delay);
+    ui->updFocusDelay->setValue(delay);
 }
 
 Configurator::~Configurator()
@@ -96,6 +109,10 @@ void Configurator::s_save()
     scrollDown.add("activated", Setting::TypeBoolean) = ui->ckbScrollDown->isChecked();
     scrollDown.add("delay", Setting::TypeInt) = ui->updScrollDownDelay->value();
     scrollDown.add("ticks", Setting::TypeInt) = ui->updScrollTicks->value();
+
+    Setting &horizFocus = root.add("horizFocus", Setting::TypeGroup);
+    horizFocus.add("activated", Setting::TypeBoolean) = ui->ckbFocus->isChecked();
+    horizFocus.add("delay", Setting::TypeInt) = ui->updFocusDelay->value();
 
     // Write out the updated configuration.
     try
