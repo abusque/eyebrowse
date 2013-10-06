@@ -39,7 +39,7 @@ public:
 	bool isWatchingBottom();
 	bool isWatchingRight();
 	bool isWatchingLeft();
-	void computePupilYAverage();
+	void computePupilAverages();
 
 	bool update();
 	void findEyes(cv::Mat frameGray, cv::Rect face);
@@ -61,11 +61,16 @@ private:
 
 	bool m_isPupilTableFilled;
 	int m_pupilIndex;
+	// In Y
 	int m_pupilYValues[NB_PUPIL_VALUES];
 	int m_posYAverage;
 	int m_maxY;
 	int m_minY;
-
+	// In X
+	int m_pupilXValues[NB_PUPIL_VALUES];
+	int m_posXAverage;
+	int m_maxX;
+	int m_minX;
 };
 
 #endif
