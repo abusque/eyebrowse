@@ -21,6 +21,7 @@ int main( int argc, const char** argv ) {
   EyeTracker tracker;
   bool lockActivated = DEFAULT_LOCKSCREEN_ACTIVATION;
   bool scrollDownActivated = DEFAULT_SCROLLDOWN_ACTIVATION;
+  int  scrollDownDelay = DEFAULT_SCROLLDOWN_DELAY;
   int  scrollDownTicks = DEFAULT_SCROLLDOWN_TICKS;
   time_t startValue = time(NULL),
          currentValue = time(NULL);
@@ -55,6 +56,7 @@ int main( int argc, const char** argv ) {
 
     Setting &scrollDown = root.add("scrollDown", Setting::TypeGroup);
     scrollDown.add("activated", Setting::TypeBoolean) = DEFAULT_SCROLLDOWN_ACTIVATION;
+    scrollDown.add("delay"), Setting::TypeInt) = DEFAULT_SCROLLDOWN_DELAY;
     scrollDown.add("ticks", Setting::TypeInt) = DEFAULT_SCROLLDOWN_TICKS;    
 
     // Write out the updated configuration.
@@ -83,6 +85,7 @@ int main( int argc, const char** argv ) {
 
     Setting &scrollDown = root["scrollDown"];
     scrollDown.lookupValue("activated", scrollDownActivated);
+    scrollDown.lookupValue("delay", scrollDownDelay);
     scrollDown.lookupValue("ticks", scrollDownTicks); 
   }
 
@@ -95,8 +98,7 @@ int main( int argc, const char** argv ) {
       lockScreen();
 
     currentValue = time(NULL);
-    cout << "current " << currentValue << " start " << startValue << " = " << difftime(currentValue, startValue) << std::endl; 
-    if(scrollDownActivated && difftime(currentValue, startValue) >= DEFAULT_SCROLLDOWN_DELAY && tracker.isWatchingBottom())
+    if(scrollDownActivated && difftime(currentValue, startValue) >= scrollDownDelay && tracker.isWatchingBottom())
     {
       startValue = currentValue;
       scrollDown(scrollDownTicks);
