@@ -63,7 +63,11 @@ int main( int argc, const char** argv ) {
     Setting &scrollDown = root.add("scrollDown", Setting::TypeGroup);
     scrollDown.add("activated", Setting::TypeBoolean) = DEFAULT_SCROLLDOWN_ACTIVATION;
     scrollDown.add("delay", Setting::TypeInt) = DEFAULT_SCROLLDOWN_DELAY;
-    scrollDown.add("ticks", Setting::TypeInt) = DEFAULT_SCROLLDOWN_TICKS;    
+    scrollDown.add("ticks", Setting::TypeInt) = DEFAULT_SCROLLDOWN_TICKS;
+
+    Setting &horizFocus = root.add("horizFocus", Setting::TypeGroup);
+    horizFocus.add("activated", Setting::TypeBoolean) = DEFAULT_HORIZ_FOCUS_ACTIVATED;
+    horizFocus.add("delay", Setting::TypeInt) = DEFAULT_HORIZ_FOCUS_DELAY;
 
     // Write out the updated configuration.
     try
@@ -92,7 +96,11 @@ int main( int argc, const char** argv ) {
     Setting &scrollDown = root["scrollDown"];
     scrollDown.lookupValue("activated", scrollDownActivated);
     scrollDown.lookupValue("delay", scrollDownDelay);
-    scrollDown.lookupValue("ticks", scrollDownTicks); 
+    scrollDown.lookupValue("ticks", scrollDownTicks);
+
+    Setting &horizFocus = root["horizFocus"];
+    horizFocus.lookupValue("activated", horizontalFocusActivated);
+    horizFocus.lookupValue("delay", horizontalFocusDelay);
   }
 
   // Read screen resolution which will be used to compute mouse position
