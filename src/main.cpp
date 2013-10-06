@@ -56,7 +56,7 @@ int main( int argc, const char** argv ) {
 
     Setting &scrollDown = root.add("scrollDown", Setting::TypeGroup);
     scrollDown.add("activated", Setting::TypeBoolean) = DEFAULT_SCROLLDOWN_ACTIVATION;
-    scrollDown.add("delay"), Setting::TypeInt) = DEFAULT_SCROLLDOWN_DELAY;
+    scrollDown.add("delay", Setting::TypeInt) = DEFAULT_SCROLLDOWN_DELAY;
     scrollDown.add("ticks", Setting::TypeInt) = DEFAULT_SCROLLDOWN_TICKS;    
 
     // Write out the updated configuration.
