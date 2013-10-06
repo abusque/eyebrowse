@@ -26,6 +26,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "findEyeCorner.h"
 
 #define NB_PUPIL_VALUES 5
+#define DELAY_REFRESH 30
 
 class EyeTracker
 {
@@ -58,6 +59,8 @@ private:
 	bool m_faceDetected;
 	double m_noFaceDuration;
 	int m_delay;
+
+	time_t m_timerRefresh;
 
 	bool m_isPupilTableFilled;
 	int m_pupilIndex;

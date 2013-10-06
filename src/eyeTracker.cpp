@@ -31,6 +31,7 @@ EyeTracker::EyeTracker(): m_faceCascadeName("haarcascade_frontalface_alt.xml"), 
 
     // Start no face timer for the first time
     m_timerStart = time(NULL);
+    m_timerRefresh = time(NULL);
 }
 
 EyeTracker::~EyeTracker()
@@ -50,17 +51,17 @@ bool EyeTracker::isAbsent()
 
 bool EyeTracker::isWatchingBottom()
 {
-  if(!m_isPupilTableFilled)
+  if(isAbsent() || !m_isPupilTableFilled)
     return false;
 
   int height = m_maxY - m_minY;
   //std::cout << height << " - " << m_posYAverage-m_minY << " result: " << (height - ((float)m_posYAverage-m_minY))/height << std::endl;
-  return (height - ((float)m_posYAverage-m_minY))/height <= 0.2f;
+  return (height - ((float)m_posYAverage-m_minY))/height <= 0.15f;
 }
 
 bool EyeTracker::isWatchingLeft()
 {
-  if(!m_isPupilTableFilled)
+  if(isAbsent() || !m_isPupilTableFilled)
     return false;
 
   int width = m_maxX - m_minX;
@@ -70,7 +71,7 @@ bool EyeTracker::isWatchingLeft()
 
 bool EyeTracker::isWatchingRight()
 {
-  if(!m_isPupilTableFilled)
+  if(isAbsent() || !m_isPupilTableFilled)
     return false;
 
   int width = m_maxX - m_minX;
@@ -232,6 +233,20 @@ void EyeTracker::findEyes(cv::Mat frameGray, cv::Rect face) {
       m_maxX = m_posXAverage;
     else if(m_posXAverage < m_minX)
       m_minX = m_posXAverage;
+
+    if(m_faceDetected && difftime(time(NULL), m_timerRefresh) >= DELAY_REFRESH)
+    {
+      m_timerRefresh = time(NULL);
+      
+      float midY = (m_maxY - m_minY)/2.0 + m_minY;
+      float midX = (m_maxX - m_minX)/2.0 + m_minX;
+      
+      m_maxY = midY * 0.25 + m_maxY * 0.75;
+      m_maxX = midX * 0.50 + m_maxX * 0.50;
+
+      m_minY = midY * 0.25 + m_minY * 0.75;
+      m_minX = midX * 0.50 + m_minX * 0.50;
+    }
 
     std::cout << "Y : " << m_posYAverage << " " << m_maxY << " " << m_minY << std::endl;
     std::cout << "X : " << m_posXAverage << " " << m_maxX << " " << m_minX << std::endl;
