@@ -60,12 +60,22 @@ bool EyeTracker::isWatchingBottom()
 
 bool EyeTracker::isWatchingLeft()
 {
-  return false;
+  if(!m_isPupilTableFilled)
+    return false;
+
+  int width = m_maxX - m_minX;
+
+  return (width - ((float)m_posXAverage-m_minX))/width >= 0.7f;
 }
 
 bool EyeTracker::isWatchingRight()
 {
-  return false;
+  if(!m_isPupilTableFilled)
+    return false;
+
+  int width = m_maxX - m_minX;
+
+  return (width - ((float)m_posXAverage-m_minX))/width <= 0.3f;
 }
 
 void EyeTracker::computePupilAverages()

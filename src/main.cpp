@@ -106,6 +106,11 @@ int main( int argc, const char** argv ) {
       startValue = currentValue;
       scrollDown(scrollDownTicks);
     }
+
+    if(tracker.isWatchingLeft())
+      std::cout << "IMMA WATCHIN LEFT" << std::endl;
+    else if(tracker.isWatchingRight())
+      std::cout << "WATCHIN RIGHT" << std::endl;
   }
     
 
