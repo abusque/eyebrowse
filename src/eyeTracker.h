@@ -26,7 +26,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "findEyeCorner.h"
 
 #define NB_PUPIL_VALUES 5
-#define DELAY_REFRESH 30
+#define DELAY_REFRESH 15
 
 class EyeTracker
 {
