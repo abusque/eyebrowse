@@ -9,7 +9,7 @@ extern "C"{
 }
 
 	int lockScreen();
-	void scrollDown();
+	void scrollDown(int scrollTicks = 8);
 	void scrollUp();
 
 #endif //UI_ACTIONS_H

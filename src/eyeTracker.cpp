@@ -54,7 +54,7 @@ bool EyeTracker::isWatchingBottom()
     return false;
 
   int height = m_maxY - m_minY;
-  std::cout << height << " - " << m_posYAverage-m_minY << " result: " << (height - ((float)m_posYAverage-m_minY))/height << std::endl;
+  //std::cout << height << " - " << m_posYAverage-m_minY << " result: " << (height - ((float)m_posYAverage-m_minY))/height << std::endl;
   return (height - ((float)m_posYAverage-m_minY))/height <= 0.2f;
 }
 
