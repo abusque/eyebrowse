@@ -10,8 +10,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #include "eyeTracker.h"
 
-EyeTracker::EyeTracker(): m_faceCascadeName("haarcascade_frontalface_alt.xml"), m_rng(12345), m_faceDetected(false), m_noFaceDuration(0), 
-  m_delay(0), m_posYAverage(0), m_posXAverage(0), m_pupilIndex(0), m_minY(0), m_minX(0), m_maxY(0), m_maxX(0), m_isPupilTableFilled(false)
+EyeTracker::EyeTracker(): m_faceCascadeName("haarcascade_frontalface_alt.xml"), m_rng(12345),
+m_faceDetected(false), m_noFaceDuration(0), m_delay(0), m_posYAverage(0), m_posXAverage(0),
+m_pupilIndex(0), m_minY(0), m_minX(0), m_maxY(0), m_maxX(0), m_isPupilTableFilled(false), isScreenLocked(false)
 {
     m_skinCrCbHist = cv::Mat::zeros(cv::Size(256, 256), CV_8UC1);
 
@@ -303,6 +304,8 @@ void EyeTracker::detectAndDisplay( cv::Mat frame ) {
   {
     if(!m_faceDetected)
       m_faceDetected = true;
+    if(isScreenLocked)
+      isScreenLocked = false;
     findEyes(frameGray, faces[0]);
   }
   else
@@ -312,9 +315,13 @@ void EyeTracker::detectAndDisplay( cv::Mat frame ) {
         m_faceDetected = false;
         m_timerStart = time(NULL);
       }
-      else
+      else if(!isScreenLocked)
       {
         m_noFaceDuration = difftime(time(NULL), m_timerStart);
+      }
+      else
+      {
+        m_noFaceDuration = 0; //Don't increment timer while screen is locked
       }
   }
 }

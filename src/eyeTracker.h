@@ -36,6 +36,7 @@ public:
 
 	void setDelay(int delay);
 	bool isAbsent();
+	bool isScreenLocked;
 
 	bool isWatchingBottom();
 	bool isWatchingRight();

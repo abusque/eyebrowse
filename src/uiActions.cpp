@@ -24,12 +24,22 @@ void scrollDown(int scrollTicks)
 
 void moveMouseLeftWindow()
 {
-    xdo_mousemove(xdo, screenCenterX - (screenWidth / 4), screenCenterY, 0);
+	int x, y;
+
+	xdo_mouselocation(xdo, &x, &y, 0);
+
+	if(x > screenCenterX)
+    	xdo_mousemove(xdo, screenCenterX - (screenWidth / 4), screenCenterY, 0);
 }
 
 void moveMouseRightWindow()
 {
-    xdo_mousemove(xdo, screenCenterX + (screenWidth / 4), screenCenterY, 0);
+	int x, y;
+
+	xdo_mouselocation(xdo, &x, &y, 0);
+
+	if(x < screenCenterX)
+    	xdo_mousemove(xdo, screenCenterX + (screenWidth / 4), screenCenterY, 0);
 }
 
 void initScreenResolution()
