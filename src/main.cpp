@@ -5,6 +5,9 @@
 #define DEFAULT_SCROLLDOWN_DELAY      2
 #define DEFAULT_SCROLLDOWN_TICKS      8
 
+#define DEFAULT_HORIZ_FOCUS_ACTIVATED true
+#define DEFAULT_HORIZ_FOCUS_DELAY     3
+
 #include <iostream>
 #include <stdlib.h>
 #include <libconfig.h++>
@@ -21,10 +24,13 @@ int main( int argc, const char** argv ) {
   EyeTracker tracker;
   bool lockActivated = DEFAULT_LOCKSCREEN_ACTIVATION;
   bool scrollDownActivated = DEFAULT_SCROLLDOWN_ACTIVATION;
+  bool horizontalFocusActivated = DEFAULT_HORIZ_FOCUS_ACTIVATED;
   int  scrollDownDelay = DEFAULT_SCROLLDOWN_DELAY;
   int  scrollDownTicks = DEFAULT_SCROLLDOWN_TICKS;
-  time_t startValue = time(NULL),
-         currentValue = time(NULL);
+  int horizontalFocusDelay = DEFAULT_HORIZ_FOCUS_DELAY;
+  time_t scrollDownStartTime = time(NULL),
+          horizontalFocusStartTime = time(NULL),
+          currentTime = time(NULL);
 
   Config cfg;
   // Read the file. If there is an error, report it and exit.
@@ -100,17 +106,22 @@ int main( int argc, const char** argv ) {
     if(lockActivated && tracker.isAbsent())
       lockScreen();
 
-    currentValue = time(NULL);
-    if(scrollDownActivated && difftime(currentValue, startValue) >= scrollDownDelay && tracker.isWatchingBottom())
+    currentTime = time(NULL);
+    if(scrollDownActivated && difftime(currentTime, scrollDownStartTime) >= scrollDownDelay && tracker.isWatchingBottom())
     {
-      startValue = currentValue;
+      scrollDownStartTime = currentTime;
       scrollDown(scrollDownTicks);
     }
 
-    if(tracker.isWatchingLeft())
-      std::cout << "IMMA WATCHIN LEFT" << std::endl;
-    else if(tracker.isWatchingRight())
-      std::cout << "WATCHIN RIGHT" << std::endl;
+    if(horizontalFocusActivated && difftime(currentTime, horizontalFocusStartTime) >= horizontalFocusDelay)
+    {
+      horizontalFocusStartTime = currentTime;
+
+      if(tracker.isWatchingLeft())
+        moveMouseLeftWindow();
+      else if(tracker.isWatchingRight())
+        moveMouseRightWindow();
+    }
   }
     
 
