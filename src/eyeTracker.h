@@ -25,6 +25,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 #include "findEyeCenter.h"
 #include "findEyeCorner.h"
 
+#define NB_PUPIL_VALUES 5
+
 class EyeTracker
 {
 public:
@@ -33,6 +35,11 @@ public:
 
 	void setDelay(int delay);
 	bool isAbsent();
+
+	bool isWatchingBottom();
+	bool isWatchingRight();
+	bool isWatchingLeft();
+	void computePupilYAverage();
 
 	bool update();
 	void findEyes(cv::Mat frameGray, cv::Rect face);
@@ -51,6 +58,14 @@ private:
 	bool m_faceDetected;
 	double m_noFaceDuration;
 	int m_delay;
+
+	bool m_isPupilTableFilled;
+	int m_pupilIndex;
+	int m_pupilYValues[NB_PUPIL_VALUES];
+	int m_posYAverage;
+	int m_maxY;
+	int m_minY;
+
 };
 
 #endif

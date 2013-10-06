@@ -10,7 +10,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #include "eyeTracker.h"
 
-EyeTracker::EyeTracker(): m_faceCascadeName("haarcascade_frontalface_alt.xml"), m_rng(12345), m_faceDetected(false), m_noFaceDuration(0), m_delay(0)
+EyeTracker::EyeTracker(): m_faceCascadeName("haarcascade_frontalface_alt.xml"), m_rng(12345), m_faceDetected(false), m_noFaceDuration(0), 
+  m_delay(0), m_posYAverage(0), m_pupilIndex(0), m_minY(0), m_maxY(0), m_isPupilTableFilled(false)
 {
     m_skinCrCbHist = cv::Mat::zeros(cv::Size(256, 256), CV_8UC1);
 
@@ -45,6 +46,36 @@ void EyeTracker::setDelay(int delay)
 bool EyeTracker::isAbsent()
 {
   return !m_faceDetected && m_noFaceDuration >= m_delay;
+}
+
+bool EyeTracker::isWatchingBottom()
+{
+  if(!m_isPupilTableFilled)
+    return false;
+
+  int height = m_maxY - m_minY;
+  std::cout << height << " - " << m_posYAverage-m_minY << " result: " << (height - ((float)m_posYAverage-m_minY))/height << std::endl;
+  return (height - ((float)m_posYAverage-m_minY))/height <= 0.2f;
+}
+
+bool EyeTracker::isWatchingLeft()
+{
+  return false;
+}
+
+bool EyeTracker::isWatchingRight()
+{
+  return false;
+}
+
+void EyeTracker::computePupilYAverage()
+{
+  m_posYAverage = 0;
+  for(int i = 0; i < NB_PUPIL_VALUES; ++i)
+      m_posYAverage += m_pupilYValues[i];
+  
+  m_posYAverage /= NB_PUPIL_VALUES;
+
 }
 
 bool EyeTracker::update()
@@ -148,7 +179,35 @@ void EyeTracker::findEyes(cv::Mat frameGray, cv::Rect face) {
 
   //Debug output
   //std::cout << "Right pupil: (" << rightPupil.x << ", " << rightPupil.y << ")" << std::endl;
-  //std::cout << "Left pupil: (" << leftPupil.x << ", " << leftPupil.y << ")" << std::endl;
+
+  int posY = (leftPupil.y + rightPupil.y)/2;
+
+
+  m_pupilYValues[m_pupilIndex] = posY;
+  ++m_pupilIndex;  
+
+  if(!m_isPupilTableFilled && m_pupilIndex == NB_PUPIL_VALUES)
+    m_isPupilTableFilled = true;
+  m_pupilIndex %= NB_PUPIL_VALUES;
+
+  if(m_isPupilTableFilled)
+  {
+    computePupilYAverage();
+
+    if(m_maxY == 0)
+    {
+      m_maxY = m_posYAverage;
+      m_minY = m_posYAverage;
+    }
+
+    if(m_posYAverage > m_maxY)
+      m_maxY = m_posYAverage;
+    else if(m_posYAverage < m_minY)
+      m_minY = m_posYAverage;
+
+    std::cout << m_posYAverage << " " << m_maxY << " " << m_minY << std::endl;
+  }
+
 }
 
 

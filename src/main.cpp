@@ -13,7 +13,7 @@ using namespace libconfig;
 
 int main( int argc, const char** argv ) {
 
-  static const std::string configFile = "config.cfg";
+  /*static const std::string configFile = "config.cfg";
   EyeTracker tracker;
   bool lockActivated = DEFAULT_LOCKSCREEN_ACTIVATION;
 
@@ -65,7 +65,7 @@ int main( int argc, const char** argv ) {
     lockScreen.lookupValue("activated", lockActivated);
 
     int delay = DEFAULT_LOCKSCREEN_DELAY;
-    lockScreen.lookupValue("delay", delay);
+    lockScreen.lookupValue("delay", delay); 
     tracker.setDelay(delay);
   }
 
@@ -76,7 +76,14 @@ int main( int argc, const char** argv ) {
 
     if(lockActivated && tracker.isAbsent())
       lockScreen();
-  }
+
+    if(tracker.isWatchingBottom())
+      scrollDown();
+  }*/
+
+  sleep(5);
+  for(int i = 0; i < 8; ++i)
+    scrollDown();
     
 
   return 0;

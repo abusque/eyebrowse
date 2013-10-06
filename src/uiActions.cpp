@@ -14,5 +14,6 @@ void scrollUp()
 
 void scrollDown()
 {
-	xdo_click(xdo, CURRENTWINDOW, 5);
+	for(int i = 0; i < 8; ++i)
+		xdo_click(xdo, CURRENTWINDOW, 5);
 }
