@@ -103,8 +103,11 @@ int main( int argc, const char** argv ) {
     if(!tracker.update())
       break;
 
-    if(lockActivated && tracker.isAbsent())
+    if(lockActivated && tracker.isAbsent() && !tracker.isScreenLocked)
+    {
       lockScreen();
+      tracker.isScreenLocked = true;
+    }
 
     currentTime = time(NULL);
     if(scrollDownActivated && difftime(currentTime, scrollDownStartTime) >= scrollDownDelay && tracker.isWatchingBottom())
