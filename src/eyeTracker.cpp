@@ -23,7 +23,6 @@ m_pupilIndex(0), m_minY(0), m_minX(0), m_maxY(0), m_maxX(0), m_isPupilTableFille
         return;
     }
 
-    createCornerKernels();
     ellipse(m_skinCrCbHist, cv::Point(113, 155.6), cv::Size(23.4, 15.2),
         43.0, 0.0, 360.0, cv::Scalar(255, 255, 255), -1);
 
@@ -33,11 +32,6 @@ m_pupilIndex(0), m_minY(0), m_minX(0), m_maxY(0), m_maxX(0), m_isPupilTableFille
     // Start no face timer for the first time
     m_timerStart = time(NULL);
     m_timerRefresh = time(NULL);
-}
-
-EyeTracker::~EyeTracker()
-{
-  releaseCornerKernels();
 }
 
 void EyeTracker::setDelay(int delay)
@@ -172,27 +166,6 @@ void EyeTracker::findEyes(cv::Mat frameGray, cv::Rect face) {
   // draw eye centers
   circle(debugFace, rightPupil, 3, 1234);
   circle(debugFace, leftPupil, 3, 1234);
-
-  //-- Find Eye Corners
-  // Never called, kEnableEyeCorner set to false for now
-  if (kEnableEyeCorner) {
-    cv::Point2f leftRightCorner = findEyeCorner(faceROI(leftRightCornerRegion), true, false);
-    leftRightCorner.x += leftRightCornerRegion.x;
-    leftRightCorner.y += leftRightCornerRegion.y;
-    cv::Point2f leftLeftCorner = findEyeCorner(faceROI(leftLeftCornerRegion), true, true);
-    leftLeftCorner.x += leftLeftCornerRegion.x;
-    leftLeftCorner.y += leftLeftCornerRegion.y;
-    cv::Point2f rightLeftCorner = findEyeCorner(faceROI(rightLeftCornerRegion), false, true);
-    rightLeftCorner.x += rightLeftCornerRegion.x;
-    rightLeftCorner.y += rightLeftCornerRegion.y;
-    cv::Point2f rightRightCorner = findEyeCorner(faceROI(rightRightCornerRegion), false, false);
-    rightRightCorner.x += rightRightCornerRegion.x;
-    rightRightCorner.y += rightRightCornerRegion.y;
-    circle(faceROI, leftRightCorner, 3, 200);
-    circle(faceROI, leftLeftCorner, 3, 200);
-    circle(faceROI, rightLeftCorner, 3, 200);
-    circle(faceROI, rightRightCorner, 3, 200);
-  }
 
   //Debug output
   //std::cout << "Right pupil: (" << rightPupil.x << ", " << rightPupil.y << ")" << std::endl;

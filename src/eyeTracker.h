@@ -23,7 +23,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 #include "constants.h"
 #include "findEyeCenter.h"
-#include "findEyeCorner.h"
 
 #define NB_PUPIL_VALUES 5
 #define DELAY_REFRESH 15
@@ -32,7 +31,6 @@ class EyeTracker
 {
 public:
 	EyeTracker();
-	~EyeTracker();
 
 	void setDelay(int delay);
 	bool isAbsent();
